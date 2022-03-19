@@ -26,8 +26,10 @@ time.sleep(2)
 
 if "Teve Legyen Veled!" in driver.page_source:
     print("Sikeres bejelentkezés!")
+elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
+    sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
 else:
-    sys.exit("Sikertelen bejelentkezés.")
+    sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
 
 
 # etetes
@@ -110,7 +112,6 @@ except NoSuchElementException:
                         except NoSuchElementException:
                             print("A teve nem volt éhes.")
                             pass
-
 # tanitas
 driver.get('https://teveclub.hu/tanit.pet')
 time.sleep(2)
@@ -143,9 +144,16 @@ except NoSuchElementException:
     except NoSuchElementException:
         pass
 
-# levelek törlése
+# levelek megynitása & törlése
 driver.get('https://teveclub.hu/inbox.pet')
 time.sleep(2)
+try:
+    level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
+    level_gomb.click()
+    time.sleep(1)
+    driver.get('https://teveclub.hu/inbox.pet')
+except NoSuchElementException:
+    pass
 try:
     kijeloles_gomb = driver.find_element(By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
     kijeloles_gomb.click()
