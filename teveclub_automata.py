@@ -15,7 +15,6 @@ tevek_szama = int(len(cp)/2)
 driver = webdriver.Chrome()
 
 for teve in range(tevek_szama):
-    print(i)
     # login
     driver.get('https://teveclub.hu/')
     time.sleep(2)
@@ -29,7 +28,7 @@ for teve in range(tevek_szama):
     time.sleep(2)
 
     if "Teve Legyen Veled!" in driver.page_source:
-        print(f"Sikeres bejelentkezés {cp[0+i]}-hez!")
+        print(f"Sikeres bejelentkezés! \nTeve: {cp[0+i]}")
     elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
@@ -153,11 +152,10 @@ for teve in range(tevek_szama):
     driver.get('https://teveclub.hu/inbox.pet')
     time.sleep(2)
     try:
-        for n in range(1, 7):
-            level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!'][i]")
-            level_gomb.click()
-            time.sleep(1)
-            driver.get('https://teveclub.hu/inbox.pet')
+        level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
+        level_gomb.click()
+        time.sleep(1)
+        driver.get('https://teveclub.hu/inbox.pet')
 
     except NoSuchElementException:
         pass
