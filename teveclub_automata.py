@@ -18,6 +18,7 @@ for teve in range(tevek_szama):
     # login
     driver.get('https://teveclub.hu/')
     time.sleep(2)
+    print("\n\n-----------------------------------------------")
     print("Oldal megnyitva.")
 
 
@@ -28,7 +29,7 @@ for teve in range(tevek_szama):
     time.sleep(2)
 
     if "Teve Legyen Veled!" in driver.page_source:
-        print(f"Sikeres bejelentkezés! \nTeve: {cp[0+i]}")
+        print(f"Sikeres bejelentkezés! Teve: {cp[0+i]}", end='')
     elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
