@@ -133,7 +133,7 @@ for teve in range(tevek_szama):
         pass
 
     # egyszám játék
-    egyszam = randint(1, 300)
+    egyszam = randint(100, 420)
     driver.get('https://teveclub.hu/egyszam.pet')
     time.sleep(2)
     try:
