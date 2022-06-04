@@ -155,6 +155,11 @@ for teve in range(tevek_szama):
     try:
         level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
         level_gomb.click()
+    #TODO
+    #     if cp[0+i] in driver.page_source:
+    #         print("GRATULÁLOK! Nyertél egy vagy több datolyát!")
+    #     else:
+    #         print("Sajnos nem nyertél az egyszámjátékon.")
         time.sleep(1)
         driver.get('https://teveclub.hu/inbox.pet')
 
