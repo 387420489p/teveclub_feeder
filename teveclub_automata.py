@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 import time
 from random import randint
@@ -21,20 +22,24 @@ for teve in range(tevek_szama):
     print("\n\n-----------------------------------------------")
     print("Oldal megnyitva.")
 
-
     id_box = driver.find_element(By.NAME, 'tevenev')
     id_box.send_keys(cp[0+i].strip())
     id_box = driver.find_element(By.NAME, 'pass')
     id_box.send_keys(cp[1+i].strip(), Keys.ENTER)
     time.sleep(2)
 
+
     if "Teve Legyen Veled!" in driver.page_source:
-        print(f"Sikeres bejelentkezés! Teve: {cp[0+i]}", end='')
+        linkek = driver.find_elements(By.XPATH, "//a[@href]")
+        for elem in linkek:
+            if "usernumber=" in elem.get_attribute("href"):
+                leltarszam = elem.get_attribute("href")
+                leltarszam = leltarszam.split("=")
+        print(f"Sikeres bejelentkezés! Teve: {cp[0+i]} Leltárszáma: {leltarszam[1]}")
     elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
         sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
-
 
     # etetes
     try:
@@ -149,18 +154,18 @@ for teve in range(tevek_szama):
         except NoSuchElementException:
             pass
 
-    # levelek megynitása & törlése
+    # levelek megnyitása, elolvasása, hogy nertél-e & törlése
     driver.get('https://teveclub.hu/inbox.pet')
     time.sleep(2)
     try:
         level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
         level_gomb.click()
-    #TODO
-    #     if cp[0+i] in driver.page_source:
-    #         print("GRATULÁLOK! Nyertél egy vagy több datolyát!")
-    #     else:
-    #         print("Sajnos nem nyertél az egyszámjátékon.")
         time.sleep(1)
+
+        if leltarszam[1] + " AL" in driver.page_source:
+            print("\nGRATULÁLOK! Nyertél egy vagy több datolyát az egyszámjátékon!\n")
+        else:
+            print("Sajnos nem nyertél az egyszámjátékon.")
         driver.get('https://teveclub.hu/inbox.pet')
 
     except NoSuchElementException:
