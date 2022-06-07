@@ -40,87 +40,25 @@ for teve in range(tevek_szama):
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
         sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
+    time.sleep(2)
 
-    # etetes
-    try:
-        select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-        select_etetes.select_by_value("7")
-        time.sleep(0.5)
-        select_itatas = Select(driver.find_element(By.NAME, "pia"))
-        select_itatas.select_by_value("7")
-        time.sleep(0.5)
-        etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-        etet_gomb.click()
-        print("7 adag kaja és pia odaadva!")
-    except NoSuchElementException:
+    # etetes beta
+    for k in range(7, -1, -1):
         try:
             select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-            select_etetes.select_by_value("6")
+            select_etetes.select_by_value(str(k))
             time.sleep(0.5)
             select_itatas = Select(driver.find_element(By.NAME, "pia"))
-            select_itatas.select_by_value("6")
+            select_itatas.select_by_value(str(k))
             time.sleep(0.5)
             etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
             etet_gomb.click()
-            print("6 adag kaja és pia odaadva!")
+            print(str(k) + " adag kaja és pia odaadva!")
         except NoSuchElementException:
-            try:
-                select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-                select_etetes.select_by_value("5")
-                time.sleep(0.5)
-                select_itatas = Select(driver.find_element(By.NAME, "pia"))
-                select_itatas.select_by_value("5")
-                time.sleep(0.5)
-                etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-                etet_gomb.click()
-                print("5 adag kaja és pia odaadva!")
-            except NoSuchElementException:
-                try:
-                    select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-                    select_etetes.select_by_value("4")
-                    time.sleep(0.5)
-                    select_itatas = Select(driver.find_element(By.NAME, "pia"))
-                    select_itatas.select_by_value("4")
-                    time.sleep(0.5)
-                    etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-                    etet_gomb.click()
-                    print("4 adag kaja és pia odaadva!")
-                except NoSuchElementException:
-                    try:
-                        select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-                        select_etetes.select_by_value("3")
-                        time.sleep(0.5)
-                        select_itatas = Select(driver.find_element(By.NAME, "pia"))
-                        select_itatas.select_by_value("3")
-                        time.sleep(0.5)
-                        etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-                        etet_gomb.click()
-                        print("3 adag kaja és pia odaadva!")
-                    except NoSuchElementException:
-                        try:
-                            select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-                            select_etetes.select_by_value("2")
-                            time.sleep(0.5)
-                            select_itatas = Select(driver.find_element(By.NAME, "pia"))
-                            select_itatas.select_by_value("2")
-                            time.sleep(0.5)
-                            etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-                            etet_gomb.click()
-                            print("2 adag kaja és pia odaadva!")
-                        except NoSuchElementException:
-                            try:
-                                select_etetes = Select(driver.find_element(By.NAME, "kaja"))
-                                select_etetes.select_by_value("1")
-                                time.sleep(0.5)
-                                select_itatas = Select(driver.find_element(By.NAME, "pia"))
-                                select_itatas.select_by_value("1")
-                                time.sleep(0.5)
-                                etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
-                                etet_gomb.click()
-                                print("1 adag kaja és pia odaadva!")
-                            except NoSuchElementException:
-                                print("A teve nem volt éhes.")
-                                pass
+            #TODO
+            # a teve nem volt éhes
+            pass
+
     # tanitas
     driver.get('https://teveclub.hu/tanit.pet')
     time.sleep(2)
