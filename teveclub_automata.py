@@ -42,7 +42,7 @@ for teve in range(tevek_szama):
         sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
     time.sleep(2)
 
-    # etetes beta
+    # etetes
     for k in range(7, -1, -1):
         try:
             select_etetes = Select(driver.find_element(By.NAME, "kaja"))
@@ -55,8 +55,8 @@ for teve in range(tevek_szama):
             etet_gomb.click()
             print(str(k) + " adag kaja és pia odaadva!")
         except NoSuchElementException:
-            #TODO
-            # a teve nem volt éhes
+            if k < 1:
+                print("A teve nem volt éhes.")
             pass
 
     # tanitas
