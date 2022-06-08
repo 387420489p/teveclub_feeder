@@ -55,7 +55,7 @@ for teve in range(tevek_szama):
             etet_gomb.click()
             print(str(k) + " adag kaja és pia odaadva!")
         except NoSuchElementException:
-            if k < 1:
+            if k == 0:
                 print("A teve nem volt éhes.")
             pass
 
