@@ -35,7 +35,7 @@ for teve in range(tevek_szama):
             if "usernumber=" in elem.get_attribute("href"):
                 leltarszam = elem.get_attribute("href")
                 leltarszam = leltarszam.split("=")
-        print(f"Sikeres bejelentkezés! Teve: {cp[0+i]} Leltárszáma: {leltarszam[1]}")
+        print(f"Sikeres bejelentkezés! Teve: {cp[0+i].strip()} Leltárszáma: {leltarszam[1]}")
     elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
@@ -54,9 +54,10 @@ for teve in range(tevek_szama):
             etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
             etet_gomb.click()
             print(str(k) + " adag kaja és pia odaadva!")
+            break
         except NoSuchElementException:
             if k == 0:
-                print("A teve nem volt éhes.")
+                print(f"{cp[0+i].strip()} nem volt éhes.")
             pass
 
     # tanitas
