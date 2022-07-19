@@ -79,11 +79,11 @@ for teve in range(tevek_szama):
     # egyszám játék
     egyszam = randint(100, 420)
     driver.get('https://teveclub.hu/egyszam.pet')
-    time.sleep(2)
+    time.sleep(3)
     try:
         egyszam_mezo = driver.find_element(By.NAME, "honnan")
         egyszam_mezo.send_keys(egyszam)
-        time.sleep(1)
+        time.sleep(2)
         egyszam_mezo.send_keys(Keys.ENTER)
         print(f"Egyszámjáték sikeres! Megjátszott szám: {egyszam}")
     except NoSuchElementException:
