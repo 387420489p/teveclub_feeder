@@ -28,6 +28,9 @@ for teve in range(tevek_szama):
     id_box.send_keys(cp[1+i].strip(), Keys.ENTER)
     time.sleep(2)
 
+    # Ez azért kell, mert néha behoz egy újdonságok oldalt, amit át kell ugrani
+    # Nem elegáns, de működik. (:
+    driver.get('https://teveclub.hu/myteve.pet')
 
     if "Teve Legyen Veled!" in driver.page_source:
         linkek = driver.find_elements(By.XPATH, "//a[@href]")
@@ -35,7 +38,8 @@ for teve in range(tevek_szama):
             if "usernumber=" in elem.get_attribute("href"):
                 leltarszam = elem.get_attribute("href")
                 leltarszam = leltarszam.split("=")
-        print(f"Sikeres bejelentkezés! Teve: {cp[0+i].strip()} Leltárszáma: {leltarszam[1]}")
+        print(
+            f"Sikeres bejelentkezés! Teve: {cp[0+i].strip()} Leltárszáma: {leltarszam[1]}")
     elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
         sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
     else:
@@ -51,7 +55,8 @@ for teve in range(tevek_szama):
             select_itatas = Select(driver.find_element(By.NAME, "pia"))
             select_itatas.select_by_value(str(k))
             time.sleep(0.5)
-            etet_gomb = driver.find_element(By.XPATH, "//input[@name='etet'][@type='submit']")
+            etet_gomb = driver.find_element(
+                By.XPATH, "//input[@name='etet'][@type='submit']")
             etet_gomb.click()
             print(str(k) + " adag kaja és pia odaadva!")
             break
@@ -88,7 +93,8 @@ for teve in range(tevek_szama):
         print(f"Egyszámjáték sikeres! Megjátszott szám: {egyszam}")
     except NoSuchElementException:
         try:
-            tipp = driver.find_element(By.XPATH, "//span[@class='kiem'][2]").text
+            tipp = driver.find_element(
+                By.XPATH, "//span[@class='kiem'][2]").text
             print(f"Ma már játszott egyszámjátékot. Tippje: {tipp}")
         except NoSuchElementException:
             pass
@@ -97,7 +103,8 @@ for teve in range(tevek_szama):
     driver.get('https://teveclub.hu/inbox.pet')
     time.sleep(2)
     try:
-        level_gomb = driver.find_element(By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
+        level_gomb = driver.find_element(
+            By.XPATH, "//img[@alt='Olvasd el ezt a levelet!']")
         level_gomb.click()
         time.sleep(1)
 
@@ -110,7 +117,8 @@ for teve in range(tevek_szama):
     except NoSuchElementException:
         pass
     try:
-        kijeloles_gomb = driver.find_element(By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
+        kijeloles_gomb = driver.find_element(
+            By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
         kijeloles_gomb.click()
         torles_gomb = driver.find_element(By.NAME, "deleteall")
         torles_gomb.click()
