@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 
-with open('pw.txt', 'r') as f:
+with open('/home/ptr/Python/teveclub_feeder/pw.txt', 'r') as f:
     cp = f.readlines()
 
 i = 0
@@ -116,19 +116,19 @@ for teve in range(tevek_szama):
 
     except NoSuchElementException:
         pass
-    try:
-        kijeloles_gomb = driver.find_element(
-            By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
-        kijeloles_gomb.click()
-        torles_gomb = driver.find_element(By.NAME, "deleteall")
-        torles_gomb.click()
-        obj = driver.switch_to.alert
-        time.sleep(0.5)
-        obj.accept()
-        print("Üzenet(ek) sikeresen törölve!")
-    except NoSuchElementException:
-        print("Nincs törölni való üzenet.")
-        pass
+    # try:
+    #     kijeloles_gomb = driver.find_element(
+    #         By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
+    #     kijeloles_gomb.click()
+    #     torles_gomb = driver.find_element(By.NAME, "deleteall")
+    #     torles_gomb.click()
+    #     time.sleep(2)
+    #     obj = driver.switch_to.alert
+    #     obj.accept()
+    #     print("Üzenet(ek) sikeresen törölve!")
+    # except NoSuchElementException:
+    #     print("Nincs törölni való üzenet.")
+    #     pass
 
     # logout
     logout_button = driver.find_element(By.NAME, "menu7")
