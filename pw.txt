@@ -1,9 +1,2 @@
-ElsőTeveNeve
-ElsőTeveJelszava
-MásodikTeveNeve
-MásodikTeveJelszava
-HarmadikTeveNeve
-HarmadikTeveJelszava
-.
-.
-.
+$coobert $cooby Doo
+93j24

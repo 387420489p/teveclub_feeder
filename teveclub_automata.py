@@ -5,48 +5,25 @@ from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.select import Select
-from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
-with open('./pw.txt', 'r') as f:
-    cp = f.readlines()
+def wait_for_element(driver, by, value, timeout=10):
+    try:
+        element_present = EC.presence_of_element_located((by, value))
+        WebDriverWait(driver, timeout).until(element_present)
+    except TimeoutException:
+        print(f"Timed out waiting for element {by}: {value}")
 
-i = 0
-tevek_szama = int(len(cp)/2)
-driver = webdriver.Chrome()
-
-for teve in range(tevek_szama):
-    # login
+def login(driver, username, password):
     driver.get('https://teveclub.hu/')
-    time.sleep(2)
-    print("\n\n-----------------------------------------------")
-    print("Oldal megnyitva.")
+    wait_for_element(driver, By.NAME, 'tevenev')
+    driver.find_element(By.NAME, 'tevenev').send_keys(username)
+    driver.find_element(By.NAME, 'pass').send_keys(password, Keys.ENTER)
 
-    id_box = driver.find_element(By.NAME, 'tevenev')
-    id_box.send_keys(cp[0+i].strip())
-    id_box = driver.find_element(By.NAME, 'pass')
-    id_box.send_keys(cp[1+i].strip(), Keys.ENTER)
-    time.sleep(2)
-
-    # Ez azért kell, mert néha behoz egy újdonságok oldalt, amit át kell ugrani
-    # Nem elegáns, de működik. (:
-    driver.get('https://teveclub.hu/myteve.pet')
-
-    if "Teve Legyen Veled!" in driver.page_source:
-        linkek = driver.find_elements(By.XPATH, "//a[@href]")
-        for elem in linkek:
-            if "usernumber=" in elem.get_attribute("href"):
-                leltarszam = elem.get_attribute("href")
-                leltarszam = leltarszam.split("=")
-        print(
-            f"Sikeres bejelentkezés! Teve: {cp[0+i].strip()} Leltárszáma: {leltarszam[1]}")
-    elif "Vagy a tevéd nevét, vagy a hívójelét eltévesztetted!" in driver.page_source:
-        sys.exit("Sikertelen bejelentkezés. Hibás név vagy jelszó.")
-    else:
-        sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
-    time.sleep(2)
-
-    # etetes
+def feed_teve(driver):
     for k in range(7, -1, -1):
         try:
             select_etetes = Select(driver.find_element(By.NAME, "kaja"))
@@ -62,10 +39,10 @@ for teve in range(tevek_szama):
             break
         except NoSuchElementException:
             if k == 0:
-                print(f"{cp[0+i].strip()} nem volt éhes.")
+                print("Nem volt éhes.")
             pass
 
-    # tanitas
+def teach_teve(driver):
     driver.get('https://teveclub.hu/tanit.pet')
     time.sleep(2)
     try:
@@ -81,7 +58,7 @@ for teve in range(tevek_szama):
         print("Ma már tanult.")
         pass
 
-    # egyszám játék
+def play_number_game(driver):
     egyszam = randint(100, 420)
     driver.get('https://teveclub.hu/egyszam.pet')
     time.sleep(3)
@@ -99,7 +76,7 @@ for teve in range(tevek_szama):
         except NoSuchElementException:
             pass
 
-    # levelek megnyitása, elolvasása, hogy nertél-e & törlése
+def handle_messages(driver, leltarszam):
     driver.get('https://teveclub.hu/inbox.pet')
     time.sleep(2)
     try:
@@ -116,22 +93,48 @@ for teve in range(tevek_szama):
 
     except NoSuchElementException:
         pass
-    # try:
-    #     kijeloles_gomb = driver.find_element(
-    #         By.XPATH, "//input[@value='kijelöl mindet'][@type='button']")
-    #     kijeloles_gomb.click()
-    #     torles_gomb = driver.find_element(By.NAME, "deleteall")
-    #     torles_gomb.click()
-    #     time.sleep(2)
-    #     obj = driver.switch_to.alert
-    #     obj.accept()
-    #     print("Üzenet(ek) sikeresen törölve!")
-    # except NoSuchElementException:
-    #     print("Nincs törölni való üzenet.")
-    #     pass
 
-    # logout
-    logout_button = driver.find_element(By.NAME, "menu7")
-    logout_button.click()
-    i += 2
-    print("Sikeres kijelentkezés.")
+def main():
+    with open('./pw.txt', 'r') as f:
+        cp = f.readlines()
+
+    tevek_szama = int(len(cp)/2)
+    driver = webdriver.Chrome()
+
+    for i in range(0, len(cp), 2):
+        try:
+            login(driver, cp[i].strip(), cp[i + 1].strip())
+            time.sleep(2)
+
+            # Néha van, hogy az Újdonságok oldal jön be login után, ezt kerüljük ki itt
+            driver.get('https://teveclub.hu/myteve.pet')
+
+            if "Teve Legyen Veled!" in driver.page_source:
+                leltarszam = [
+                    elem.get_attribute("href").split("=")[1] for elem in driver.find_elements(By.XPATH, "//a[@href]") if "usernumber=" in elem.get_attribute("href")
+                ]
+                print(f"Sikeres bejelentkezés! Teve: {cp[i].strip()} Leltárszáma: {leltarszam[0]}")
+            else:
+                sys.exit("Sikertelen bejelentkezés, ismeretlen hiba.")
+            time.sleep(2)
+
+            # Perform other actions (feeding, teaching, playing game, handling messages)
+            feed_teve(driver)
+            teach_teve(driver)
+            play_number_game(driver)
+            handle_messages(driver, leltarszam)
+
+            # Logout
+            logout_button = driver.find_element(By.NAME, "menu7")
+            logout_button.click()
+            print("Sikeres kijelentkezés.")
+            time.sleep(2)
+
+        except Exception as e:
+            print(f"Error for Teve {cp[i].strip()}: {str(e)}")
+
+    # Close the browser window
+    driver.quit()
+
+if __name__ == "__main__":
+    main()
