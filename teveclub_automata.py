@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 
-with open('/home/ptr/Python/teveclub_feeder/pw.txt', 'r') as f:
+with open('./pw.txt', 'r') as f:
     cp = f.readlines()
 
 i = 0
